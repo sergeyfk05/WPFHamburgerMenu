@@ -97,6 +97,7 @@ namespace HamburgerMenu
                 {
                     Orientation = Orientation.Vertical,
                     Margin = DropdownMenuOffset,
+                    MaxHeight = 0
                 };
 
                 foreach (var el in item.DropdownItems)
