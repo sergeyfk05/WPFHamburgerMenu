@@ -122,20 +122,20 @@ namespace HamburgerMenu
                     {
                         if (senderPanel.Parent is Panel parentPanel)
                         {
-                            var i = parentPanel.Children[parentPanel.Children.IndexOf(senderPanel) + 1];
+                            var submenu = parentPanel.Children[parentPanel.Children.IndexOf(senderPanel) + 1];
 
-                            if (i is Panel ii)
+                            if (submenu is Panel submenuPanel)
                             {
-                                if (ii.MaxHeight == 0)
+                                if (submenuPanel.MaxHeight == 0)
                                 {
-                                    dropdownAnimation.KeyFrames[1].Value = ii.RenderSize.Height;
-                                    ii.BeginAnimation(Panel.MaxHeightProperty, dropdownAnimation);
+                                    dropdownAnimation.KeyFrames[1].Value = submenuPanel.RenderSize.Height;
+                                    submenuPanel.BeginAnimation(Panel.MaxHeightProperty, dropdownAnimation);
                                 }
                                 else
                                 {
-                                    dropupAnimation.From = ii.RenderSize.Height;
+                                    dropupAnimation.From = submenuPanel.RenderSize.Height;
                                     dropupAnimation.To = 0;
-                                    ii.BeginAnimation(Panel.MaxHeightProperty, dropupAnimation);
+                                    submenuPanel.BeginAnimation(Panel.MaxHeightProperty, dropupAnimation);
                                 }
                             }
                         }
