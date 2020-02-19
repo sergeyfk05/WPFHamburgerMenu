@@ -48,7 +48,7 @@ namespace HamburgerMenu
                 Background = new SolidColorBrush(item.IsSelected ? SelectedItemBackground : Background)
             };
 
-            
+
             ColorAnimation mouseEnterAnimation = new ColorAnimation()
             {
                 From = item.IsSelected ? SelectedItemBackground : Background,
@@ -59,7 +59,7 @@ namespace HamburgerMenu
 
             ColorAnimation mouseLeaveAnimation = new ColorAnimation()
             {
-                From = MouseInBackground,                
+                From = MouseInBackground,
                 To = item.IsSelected ? SelectedItemBackground : Background,
                 Duration = MouseInOverAnimationDuration
             };
@@ -91,7 +91,7 @@ namespace HamburgerMenu
 
             toAdd.Children.Add(result);
 
-            if(item.IsDropdownItem && item.DropdownItems != null)
+            if (item.IsDropdownItem && item.DropdownItems != null)
             {
                 StackPanel dropdownMenu = new StackPanel()
                 {
@@ -104,62 +104,44 @@ namespace HamburgerMenu
                     CreateNavMenuItem(el, dropdownMenu);
                 }
 
-                DoubleAnimation dropdownAnimation = new DoubleAnimation()
-                {
-                    From = 0,
-                    To = item.DropdownItems.Count() * ItemHeight,
-                    Duration = DropdownMenuAnimationDuration,
-                    EasingFunction = DropdownMenuFunction
-                };
 
                 DoubleAnimation dropupAnimation = new DoubleAnimation()
                 {
-                    From = item.DropdownItems.Count() * ItemHeight,
-                    To = 0,
                     Duration = DropdownMenuAnimationDuration,
                     EasingFunction = DropdownMenuFunction
                 };
 
+                DoubleAnimationUsingKeyFrames dropdownAnimation = new DoubleAnimationUsingKeyFrames();
+                dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0)), Value = 0});
+                dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(DropdownMenuAnimationDuration.Milliseconds - 1)), Value = 0 });
+                dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(DropdownMenuAnimationDuration), Value = 100000 });
 
-
-                result.MouseLeftButtonUp += (object sender, MouseButtonEventArgs e) => 
+                result.MouseLeftButtonUp += (object sender, MouseButtonEventArgs e) =>
                 {
-                    //if(sender is Panel senderPanel)
-                    //{
-                    //    if(senderPanel.Parent is Panel parentPanel)
-                    //    {
-                    //        var i = parentPanel.Children[parentPanel.Children.IndexOf(senderPanel) + 1];
+                    if (sender is Panel senderPanel)
+                    {
+                        if (senderPanel.Parent is Panel parentPanel)
+                        {
+                            var i = parentPanel.Children[parentPanel.Children.IndexOf(senderPanel) + 1];
 
-                    //        if(i is Panel ii)
-                    //        {
-                    //            if(ii.Height == 0)
-                    //            {
-                    //                dropdownAnimation.From = 0;
-                    //                dropdownAnimation.To = ii.RenderSize.Height;
-                    //                ii.BeginAnimation(Panel.HeightProperty, dropdownAnimation);
-                    //            }
-                    //            else
-                    //            {
-                    //                dropdownAnimation.From = ii.RenderSize.Height;
-                    //                dropdownAnimation.To = 0;
-                    //                ii.BeginAnimation(Panel.HeightProperty, dropdownAnimation);
-                    //            }
-                    //        }
-                    //    }
-                    //}
+                            if (i is Panel ii)
+                            {
+                                if (ii.MaxHeight == 0)
+                                {
+                                    dropdownAnimation.KeyFrames[1].Value = ii.RenderSize.Height;
+                                    ii.BeginAnimation(Panel.MaxHeightProperty, dropdownAnimation);
+                                }
+                                else
+                                {
+                                    dropupAnimation.From = ii.RenderSize.Height;
+                                    dropupAnimation.To = 0;
+                                    ii.BeginAnimation(Panel.MaxHeightProperty, dropupAnimation);
+                                }
+                            }
+                        }
+                    }
 
-
-                    if (dropdownMenu.Height == 0)
-                {
-
-                    dropdownMenu.BeginAnimation(Panel.HeightProperty, dropdownAnimation);
-                }
-                else
-                {
-                    dropdownMenu.BeginAnimation(Panel.HeightProperty, dropupAnimation);
-                }
-
-            };
+                };
 
                 toAdd.Children.Add(dropdownMenu);
             }
@@ -244,16 +226,18 @@ namespace HamburgerMenu
 
 
 
-
-        public Duration DropdownMenuAnimationDuration
+        public TimeSpan DropdownMenuAnimationDuration
         {
-            get { return (Duration)GetValue(DropdownMenuAnimationDurationProperty); }
+            get { return (TimeSpan)GetValue(DropdownMenuAnimationDurationProperty); }
             set { SetValue(DropdownMenuAnimationDurationProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for DropdownMenuAnimationDuration.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DropdownMenuAnimationDurationProperty =
-            DependencyProperty.Register("DropdownMenuAnimationDuration", typeof(Duration), typeof(NavMenu), new PropertyMetadata(new Duration(TimeSpan.FromMilliseconds(350))));
+            DependencyProperty.Register("DropdownMenuAnimationDuration", typeof(TimeSpan), typeof(NavMenu), new PropertyMetadata(TimeSpan.FromMilliseconds(350)));
+
+
+
 
 
 
@@ -266,7 +250,7 @@ namespace HamburgerMenu
 
         // Using a DependencyProperty as the backing store for SelectedItemBackground.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedItemBackgroundProperty =
-            DependencyProperty.Register("SelectedItemBackground", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(100,100,100)));
+            DependencyProperty.Register("SelectedItemBackground", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(100, 100, 100)));
 
 
 
