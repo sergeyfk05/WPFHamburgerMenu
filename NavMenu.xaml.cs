@@ -41,6 +41,8 @@ namespace HamburgerMenu
 
         private void CreateNavMenuItem(NavMenuItemData item, Panel toAdd)
         {
+            #region создание самого элемента
+
             StackPanel result = new StackPanel()
             {
                 Orientation = Orientation.Horizontal,
@@ -91,6 +93,10 @@ namespace HamburgerMenu
 
             toAdd.Children.Add(result);
 
+            #endregion
+
+            #region создание подменю
+
             if (item.IsDropdownItem && item.DropdownItems != null)
             {
                 StackPanel dropdownMenu = new StackPanel()
@@ -117,6 +123,7 @@ namespace HamburgerMenu
                 dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(DropdownMenuAnimationDuration.Milliseconds - 1)), Value = 0 });
                 dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(DropdownMenuAnimationDuration), Value = 100000 });
 
+                #region обработчик кликов для скрытия/раскрытия меню
                 result.MouseLeftButtonUp += (object sender, MouseButtonEventArgs e) =>
                 {
                     if (sender is Panel senderPanel)
@@ -143,9 +150,12 @@ namespace HamburgerMenu
                     }
 
                 };
+                #endregion
 
                 toAdd.Children.Add(dropdownMenu);
             }
+
+            #endregion
 
         }
 
