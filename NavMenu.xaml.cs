@@ -96,13 +96,71 @@ namespace HamburgerMenu
                 StackPanel dropdownMenu = new StackPanel()
                 {
                     Orientation = Orientation.Vertical,
-                    Margin = DropdownMenuOffset
+                    Margin = DropdownMenuOffset,
                 };
 
                 foreach (var el in item.DropdownItems)
                 {
                     CreateNavMenuItem(el, dropdownMenu);
                 }
+
+                DoubleAnimation dropdownAnimation = new DoubleAnimation()
+                {
+                    From = 0,
+                    To = item.DropdownItems.Count() * ItemHeight,
+                    Duration = DropdownMenuAnimationDuration,
+                    EasingFunction = DropdownMenuFunction
+                };
+
+                DoubleAnimation dropupAnimation = new DoubleAnimation()
+                {
+                    From = item.DropdownItems.Count() * ItemHeight,
+                    To = 0,
+                    Duration = DropdownMenuAnimationDuration,
+                    EasingFunction = DropdownMenuFunction
+                };
+
+
+
+                result.MouseLeftButtonUp += (object sender, MouseButtonEventArgs e) => 
+                {
+                    //if(sender is Panel senderPanel)
+                    //{
+                    //    if(senderPanel.Parent is Panel parentPanel)
+                    //    {
+                    //        var i = parentPanel.Children[parentPanel.Children.IndexOf(senderPanel) + 1];
+
+                    //        if(i is Panel ii)
+                    //        {
+                    //            if(ii.Height == 0)
+                    //            {
+                    //                dropdownAnimation.From = 0;
+                    //                dropdownAnimation.To = ii.RenderSize.Height;
+                    //                ii.BeginAnimation(Panel.HeightProperty, dropdownAnimation);
+                    //            }
+                    //            else
+                    //            {
+                    //                dropdownAnimation.From = ii.RenderSize.Height;
+                    //                dropdownAnimation.To = 0;
+                    //                ii.BeginAnimation(Panel.HeightProperty, dropdownAnimation);
+                    //            }
+                    //        }
+                    //    }
+                    //}
+
+
+                    if (dropdownMenu.Height == 0)
+                {
+
+                    dropdownMenu.BeginAnimation(Panel.HeightProperty, dropdownAnimation);
+                }
+                else
+                {
+                    dropdownMenu.BeginAnimation(Panel.HeightProperty, dropupAnimation);
+                }
+
+            };
+
                 toAdd.Children.Add(dropdownMenu);
             }
 
@@ -187,6 +245,18 @@ namespace HamburgerMenu
 
 
 
+        public Duration DropdownMenuAnimationDuration
+        {
+            get { return (Duration)GetValue(DropdownMenuAnimationDurationProperty); }
+            set { SetValue(DropdownMenuAnimationDurationProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DropdownMenuAnimationDuration.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DropdownMenuAnimationDurationProperty =
+            DependencyProperty.Register("DropdownMenuAnimationDuration", typeof(Duration), typeof(NavMenu), new PropertyMetadata(new Duration(TimeSpan.FromMilliseconds(350))));
+
+
+
 
         public Color SelectedItemBackground
         {
@@ -212,6 +282,18 @@ namespace HamburgerMenu
             DependencyProperty.Register("DropdownMenuOffset", typeof(Thickness), typeof(NavMenu), new PropertyMetadata(new Thickness(20, 0, 0, 0)));
 
 
+
+
+
+        public IEasingFunction DropdownMenuFunction
+        {
+            get { return (IEasingFunction)GetValue(DropdownMenuFunctionProperty); }
+            set { SetValue(DropdownMenuFunctionProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DropdownMenuFunction.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DropdownMenuFunctionProperty =
+            DependencyProperty.Register("DropdownMenuFunction", typeof(IEasingFunction), typeof(NavMenu), new PropertyMetadata(new CircleEase()));
 
 
 
