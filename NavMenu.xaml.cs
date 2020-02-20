@@ -39,7 +39,7 @@ namespace HamburgerMenu
             }
         }
 
-        private void CreateNavMenuItem(NavMenuItemData item, Panel toAdd)
+        private void CreateNavMenuItem(NavMenuItemData item, Panel toAdd, int offset = 0)
         {
             #region создание самого элемента
 
@@ -48,31 +48,14 @@ namespace HamburgerMenu
                 Height = ItemHeight,
                 Background = new SolidColorBrush(item.IsSelected ? SelectedItemBackground : Background)
             };
-
-
-            ColorAnimation mouseEnterAnimation = new ColorAnimation()
-            {
-                From = item.IsSelected ? SelectedItemBackground : Background,
-                To = MouseInBackground,
-                Duration = MouseInOverAnimationDuration
-            };
-            result.MouseEnter += (object sender, MouseEventArgs e) => { result.Background.BeginAnimation(SolidColorBrush.ColorProperty, mouseEnterAnimation); };
-
-            ColorAnimation mouseLeaveAnimation = new ColorAnimation()
-            {
-                From = MouseInBackground,
-                To = item.IsSelected ? SelectedItemBackground : Background,
-                Duration = MouseInOverAnimationDuration
-            };
-            result.MouseLeave += (object sender, MouseEventArgs e) => { result.Background.BeginAnimation(SolidColorBrush.ColorProperty, mouseLeaveAnimation); };
-          
+        
 
             Image icon = new Image()
             {
                 Height = IconSize,
                 Width = IconSize,
-                Margin = new Thickness((ItemHeight - IconSize) / 2),
-                Source = new BitmapImage(new Uri(new Uri(Assembly.GetExecutingAssembly().Location), "1.png"))
+                Margin = new Thickness((ItemHeight - IconSize) / 2 + offset, (ItemHeight - IconSize) / 2, (ItemHeight - IconSize) / 2, (ItemHeight - IconSize) / 2),
+                Source = new BitmapImage(item.ImageSource)
             };
             DockPanel.SetDock(icon, Dock.Left);
             result.Children.Add(icon);
@@ -81,10 +64,49 @@ namespace HamburgerMenu
             TextBlock text = new TextBlock()
             {
                 VerticalAlignment = VerticalAlignment.Center,
-                Text = item.Text
+                Text = item.Text,
+                Foreground = item.IsSelected ? new SolidColorBrush(SelectedItemTextColor) : new SolidColorBrush(ItemTextColor)
             };
             DockPanel.SetDock(text, Dock.Left);
             result.Children.Add(text);
+
+
+
+            ColorAnimation mouseEnterAnimation = new ColorAnimation()
+            {
+                From = item.IsSelected ? SelectedItemBackground : Background,
+                To = MouseInItemBackground,
+                Duration = MouseInOverAnimationDuration
+            };
+            ColorAnimation mouseEnterTextAnimation = new ColorAnimation()
+            {
+                From = item.IsSelected ? SelectedItemTextColor : ItemTextColor,
+                To = MouseInItemTextColor,
+                Duration = MouseInOverAnimationDuration
+            };
+            result.MouseEnter += (object sender, MouseEventArgs e) => 
+            {
+                result.Background.BeginAnimation(SolidColorBrush.ColorProperty, mouseEnterAnimation);
+                text.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, mouseEnterTextAnimation);
+            };
+
+            ColorAnimation mouseLeaveAnimation = new ColorAnimation()
+            {
+                From = MouseInItemBackground,
+                To = item.IsSelected ? SelectedItemBackground : Background,
+                Duration = MouseInOverAnimationDuration
+            };
+            ColorAnimation mouseLeaveTextAnimation = new ColorAnimation()
+            {
+                To = item.IsSelected ? SelectedItemTextColor : ItemTextColor,
+                From = MouseInItemTextColor,
+                Duration = MouseInOverAnimationDuration
+            };
+            result.MouseLeave += (object sender, MouseEventArgs e) => 
+            {
+                result.Background.BeginAnimation(SolidColorBrush.ColorProperty, mouseLeaveAnimation);
+                text.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, mouseLeaveTextAnimation);
+            };
 
 
             toAdd.Children.Add(result);
@@ -93,16 +115,17 @@ namespace HamburgerMenu
 
             #region создание подменю
 
+            bool isAnimatedNow = false;
             if (item.IsDropdownItem && item.DropdownItems != null)
             {
                 Image dropdownIcon = new Image()
                 {
-                    Height = IconSize,
-                    Width = IconSize,
-                    Margin = new Thickness((ItemHeight - IconSize) / 2),
+                    Height = DropdownIconSize,
+                    Width = DropdownIconSize,
+                    Margin = new Thickness((ItemHeight - DropdownIconSize) / 2),
                     HorizontalAlignment = HorizontalAlignment.Right,
-                    Source = new BitmapImage(new Uri(new Uri(Assembly.GetExecutingAssembly().Location), "1.png")),
-                    RenderTransform = new RotateTransform(0, IconSize / 2, IconSize / 2),
+                    Source = new BitmapImage(DropdownIconSource),
+                    RenderTransform = new RotateTransform(0, DropdownIconSize / 2, DropdownIconSize / 2),
                     Name = "dropdownIcon"
                 };
                 DockPanel.SetDock(dropdownIcon, Dock.Right);
@@ -117,13 +140,12 @@ namespace HamburgerMenu
                 StackPanel dropdownMenu = new StackPanel()
                 {
                     Orientation = Orientation.Vertical,
-                    Margin = DropdownMenuOffset,
                     MaxHeight = 0
                 };
 
                 foreach (var el in item.DropdownItems)
                 {
-                    CreateNavMenuItem(el, dropdownMenu);
+                    CreateNavMenuItem(el, dropdownMenu, offset + DropdownMenuLeftOffset);
                 }
 
 
@@ -138,10 +160,16 @@ namespace HamburgerMenu
                 dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(DropdownMenuAnimationDuration.Milliseconds - 1)), EasingFunction = DropdownMenuFunction });
                 dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(DropdownMenuAnimationDuration), Value = 100000 });
 
+
+
+
                 #region обработчик кликов для скрытия/раскрытия меню
+
+                rotateAnimation.Completed += (object sender, EventArgs e) => { isAnimatedNow = false; };
+
                 result.MouseLeftButtonUp += (object sender, MouseButtonEventArgs e) =>
                 {
-                    if (sender is Panel senderPanel)
+                    if (!isAnimatedNow && (sender is Panel senderPanel))
                     {
                         if (senderPanel.Parent is Panel parentPanel)
                         {
@@ -149,6 +177,7 @@ namespace HamburgerMenu
 
                             if (submenu is Panel submenuPanel)
                             {
+                                isAnimatedNow = true;
                                 if (submenuPanel.MaxHeight == 0)
                                 {
                                     rotateAnimation.From = 0;
@@ -242,13 +271,13 @@ namespace HamburgerMenu
 
 
 
-        public Color MouseInBackground
+        public Color MouseInItemBackground
         {
-            get { return (Color)GetValue(MouseInBackgroundProperty); }
-            set { SetValue(MouseInBackgroundProperty, value); }
+            get { return (Color)GetValue(MouseInItemBackgroundProperty); }
+            set { SetValue(MouseInItemBackgroundProperty, value); }
         }
-        public static readonly DependencyProperty MouseInBackgroundProperty =
-            DependencyProperty.Register("MouseInBackground", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(155, 155, 155)));
+        public static readonly DependencyProperty MouseInItemBackgroundProperty =
+            DependencyProperty.Register("MouseInItemBackground", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(155, 155, 155)));
 
 
 
@@ -272,10 +301,6 @@ namespace HamburgerMenu
 
 
 
-
-
-
-
         public Color SelectedItemBackground
         {
             get { return (Color)GetValue(SelectedItemBackgroundProperty); }
@@ -287,15 +312,13 @@ namespace HamburgerMenu
 
 
 
-        public Thickness DropdownMenuOffset
+        public int DropdownMenuLeftOffset
         {
-            get { return (Thickness)GetValue(DropdownMenuOffsetProperty); }
-            set { SetValue(DropdownMenuOffsetProperty, value); }
+            get { return (int)GetValue(DropdownMenuLeftOffsetProperty); }
+            set { SetValue(DropdownMenuLeftOffsetProperty, value); }
         }
-        public static readonly DependencyProperty DropdownMenuOffsetProperty =
-            DependencyProperty.Register("DropdownMenuOffset", typeof(Thickness), typeof(NavMenu), new PropertyMetadata(new Thickness(20, 0, 0, 0)));
-
-
+        public static readonly DependencyProperty DropdownMenuLeftOffsetProperty =
+            DependencyProperty.Register("DropdownMenuLeftOffset", typeof(int), typeof(NavMenu), new PropertyMetadata(20));
 
 
 
@@ -306,6 +329,64 @@ namespace HamburgerMenu
         }
         public static readonly DependencyProperty DropdownMenuFunctionProperty =
             DependencyProperty.Register("DropdownMenuFunction", typeof(IEasingFunction), typeof(NavMenu), new PropertyMetadata(new CircleEase()));
+
+
+
+
+        public int DropdownIconSize
+        {
+            get { return (int)GetValue(DropdownIconSizeProperty); }
+            set { SetValue(DropdownIconSizeProperty, value); }
+        }   
+        public static readonly DependencyProperty DropdownIconSizeProperty =
+            DependencyProperty.Register("DropdownIconSize", typeof(int), typeof(NavMenu), new PropertyMetadata(10));
+
+
+
+        public Uri DropdownIconSource
+        {
+            get { return (Uri)GetValue(DropdownIconSourceProperty); }
+            set { SetValue(DropdownIconSourceProperty, value); }
+        }
+        public static readonly DependencyProperty DropdownIconSourceProperty =
+            DependencyProperty.Register("DropdownIconSource", typeof(Uri), typeof(NavMenu), new PropertyMetadata(new Uri(new Uri(Assembly.GetExecutingAssembly().Location), "1.png")));
+
+
+
+
+        public Color ItemTextColor
+        {
+            get { return (Color)GetValue(ItemTextColorProperty); }
+            set { SetValue(ItemTextColorProperty, value); }
+        }
+        public static readonly DependencyProperty ItemTextColorProperty =
+            DependencyProperty.Register("ItemTextColor", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(0, 0, 0)));
+
+
+
+
+
+
+        public Color MouseInItemTextColor
+        {
+            get { return (Color)GetValue(MouseInItemTextColorProperty); }
+            set { SetValue(MouseInItemTextColorProperty, value); }
+        }
+        public static readonly DependencyProperty MouseInItemTextColorProperty =
+            DependencyProperty.Register("MouseInItemTextColor", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(0, 255, 0)));
+
+
+
+
+        public Color SelectedItemTextColor
+        {
+            get { return (Color)GetValue(SelectedItemTextColorProperty); }
+            set { SetValue(SelectedItemTextColorProperty, value); }
+        }
+        public static readonly DependencyProperty SelectedItemTextColorProperty =
+            DependencyProperty.Register("SelectedItemTextColor", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(0, 0, 255)));
+
+
 
 
 

@@ -21,7 +21,7 @@ namespace HamburgerMenu
 
         private List<NavMenuItemData> _dropdownItems;
 
-        public string ImageSource { get; set; }
+        public Uri ImageSource { get; set; }
 
         public string Text { get; set; }
 
