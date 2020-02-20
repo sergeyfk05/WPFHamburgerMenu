@@ -99,6 +99,22 @@ namespace HamburgerMenu
 
             if (item.IsDropdownItem && item.DropdownItems != null)
             {
+
+                Image dropdownIcon = new Image()
+                {
+                    Height = IconSize,
+                    Width = IconSize,
+                    Margin = new Thickness((ItemHeight - IconSize) / 2),
+                    HorizontalAlignment = HorizontalAlignment.Right
+                };
+                BitmapImage bitmap1 = new BitmapImage();
+                bitmap1.BeginInit();
+                bitmap1.UriSource = new Uri(new Uri(Assembly.GetExecutingAssembly().Location), "1.png");
+                bitmap1.EndInit();
+                dropdownIcon.Source = bitmap;
+
+                result.Children.Add(dropdownIcon);
+
                 StackPanel dropdownMenu = new StackPanel()
                 {
                     Orientation = Orientation.Vertical,
@@ -119,8 +135,8 @@ namespace HamburgerMenu
                 };
 
                 DoubleAnimationUsingKeyFrames dropdownAnimation = new DoubleAnimationUsingKeyFrames();
-                dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0)), Value = 0});
-                dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(DropdownMenuAnimationDuration.Milliseconds - 1)), Value = 0 });
+                dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(0)), Value = 0,  EasingFunction = DropdownMenuFunction});
+                dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(DropdownMenuAnimationDuration.Milliseconds - 1)), EasingFunction = DropdownMenuFunction });
                 dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(DropdownMenuAnimationDuration), Value = 100000 });
 
                 #region обработчик кликов для скрытия/раскрытия меню
@@ -242,8 +258,6 @@ namespace HamburgerMenu
             get { return (TimeSpan)GetValue(DropdownMenuAnimationDurationProperty); }
             set { SetValue(DropdownMenuAnimationDurationProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for DropdownMenuAnimationDuration.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DropdownMenuAnimationDurationProperty =
             DependencyProperty.Register("DropdownMenuAnimationDuration", typeof(TimeSpan), typeof(NavMenu), new PropertyMetadata(TimeSpan.FromMilliseconds(350)));
 
@@ -258,8 +272,6 @@ namespace HamburgerMenu
             get { return (Color)GetValue(SelectedItemBackgroundProperty); }
             set { SetValue(SelectedItemBackgroundProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for SelectedItemBackground.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedItemBackgroundProperty =
             DependencyProperty.Register("SelectedItemBackground", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(100, 100, 100)));
 
@@ -271,8 +283,6 @@ namespace HamburgerMenu
             get { return (Thickness)GetValue(DropdownMenuOffsetProperty); }
             set { SetValue(DropdownMenuOffsetProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for DropdownMenuOffset.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DropdownMenuOffsetProperty =
             DependencyProperty.Register("DropdownMenuOffset", typeof(Thickness), typeof(NavMenu), new PropertyMetadata(new Thickness(20, 0, 0, 0)));
 
@@ -285,8 +295,6 @@ namespace HamburgerMenu
             get { return (IEasingFunction)GetValue(DropdownMenuFunctionProperty); }
             set { SetValue(DropdownMenuFunctionProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for DropdownMenuFunction.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DropdownMenuFunctionProperty =
             DependencyProperty.Register("DropdownMenuFunction", typeof(IEasingFunction), typeof(NavMenu), new PropertyMetadata(new CircleEase()));
 
