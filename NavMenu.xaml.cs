@@ -43,9 +43,8 @@ namespace HamburgerMenu
         {
             #region создание самого элемента
 
-            StackPanel result = new StackPanel()
+            DockPanel result = new DockPanel()
             {
-                Orientation = Orientation.Horizontal,
                 Height = ItemHeight,
                 Background = new SolidColorBrush(item.IsSelected ? SelectedItemBackground : Background)
             };
@@ -66,21 +65,16 @@ namespace HamburgerMenu
                 Duration = MouseInOverAnimationDuration
             };
             result.MouseLeave += (object sender, MouseEventArgs e) => { result.Background.BeginAnimation(SolidColorBrush.ColorProperty, mouseLeaveAnimation); };
-
+          
 
             Image icon = new Image()
             {
                 Height = IconSize,
                 Width = IconSize,
-                Margin = new Thickness((ItemHeight - IconSize) / 2)
+                Margin = new Thickness((ItemHeight - IconSize) / 2),
+                Source = new BitmapImage(new Uri(new Uri(Assembly.GetExecutingAssembly().Location), "1.png"))
             };
-
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(new Uri(Assembly.GetExecutingAssembly().Location), "1.png");
-            bitmap.EndInit();
-            icon.Source = bitmap;
-
+            DockPanel.SetDock(icon, Dock.Left);
             result.Children.Add(icon);
 
 
@@ -89,7 +83,9 @@ namespace HamburgerMenu
                 VerticalAlignment = VerticalAlignment.Center,
                 Text = item.Text
             };
+            DockPanel.SetDock(text, Dock.Left);
             result.Children.Add(text);
+
 
             toAdd.Children.Add(result);
 
@@ -99,22 +95,25 @@ namespace HamburgerMenu
 
             if (item.IsDropdownItem && item.DropdownItems != null)
             {
-
                 Image dropdownIcon = new Image()
                 {
                     Height = IconSize,
                     Width = IconSize,
                     Margin = new Thickness((ItemHeight - IconSize) / 2),
-                    HorizontalAlignment = HorizontalAlignment.Right
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    Source = new BitmapImage(new Uri(new Uri(Assembly.GetExecutingAssembly().Location), "1.png")),
+                    RenderTransform = new RotateTransform(0, IconSize / 2, IconSize / 2),
+                    Name = "dropdownIcon"
                 };
-                BitmapImage bitmap1 = new BitmapImage();
-                bitmap1.BeginInit();
-                bitmap1.UriSource = new Uri(new Uri(Assembly.GetExecutingAssembly().Location), "1.png");
-                bitmap1.EndInit();
-                dropdownIcon.Source = bitmap;
-
+                DockPanel.SetDock(dropdownIcon, Dock.Right);
                 result.Children.Add(dropdownIcon);
 
+                DoubleAnimation rotateAnimation = new DoubleAnimation()
+                {
+                    Duration = DropdownMenuAnimationDuration,
+                    EasingFunction = DropdownMenuFunction,
+                };
+                
                 StackPanel dropdownMenu = new StackPanel()
                 {
                     Orientation = Orientation.Vertical,
@@ -152,14 +151,24 @@ namespace HamburgerMenu
                             {
                                 if (submenuPanel.MaxHeight == 0)
                                 {
+                                    rotateAnimation.From = 0;
+                                    rotateAnimation.To = 180;
                                     dropdownAnimation.KeyFrames[1].Value = submenuPanel.RenderSize.Height;
                                     submenuPanel.BeginAnimation(Panel.MaxHeightProperty, dropdownAnimation);
                                 }
                                 else
                                 {
+                                    rotateAnimation.From = 180;
+                                    rotateAnimation.To = 360;
                                     dropupAnimation.From = submenuPanel.RenderSize.Height;
                                     dropupAnimation.To = 0;
                                     submenuPanel.BeginAnimation(Panel.MaxHeightProperty, dropupAnimation);
+                                }
+
+                                
+                                if((LogicalTreeHelper.FindLogicalNode(senderPanel, "dropdownIcon") is Image img) && (img.RenderTransform is RotateTransform transform))
+                                {
+                                   transform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
                                 }
                             }
                         }
