@@ -65,7 +65,10 @@ namespace HamburgerMenu
             {
                 VerticalAlignment = VerticalAlignment.Center,
                 Text = item.Text,
-                Foreground = item.IsSelected ? new SolidColorBrush(SelectedItemTextColor) : new SolidColorBrush(ItemTextColor)
+                Foreground = item.IsSelected ? new SolidColorBrush(SelectedItemTextColor) : new SolidColorBrush(ItemTextColor),
+                FontFamily = ItemTextFontFamily,
+                FontSize = ItemTextFontSize,
+                FontWeight = ItemTextFontWeight
             };
             DockPanel.SetDock(text, Dock.Left);
             result.Children.Add(text);
@@ -107,6 +110,8 @@ namespace HamburgerMenu
                 result.Background.BeginAnimation(SolidColorBrush.ColorProperty, mouseLeaveAnimation);
                 text.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, mouseLeaveTextAnimation);
             };
+
+            result.MouseUp += (object sender, MouseButtonEventArgs e) => { sad(item); };
 
 
             toAdd.Children.Add(result);
@@ -219,7 +224,10 @@ namespace HamburgerMenu
             Draw(Root);
         }
 
-
+        void sad(NavMenuItemData n)
+        {
+            System.Threading.Thread.Sleep(1000);
+        }
 
 
         public List<NavMenuItemData> ItemSource
@@ -364,9 +372,6 @@ namespace HamburgerMenu
 
 
 
-
-
-
         public Color MouseInItemTextColor
         {
             get { return (Color)GetValue(MouseInItemTextColorProperty); }
@@ -389,6 +394,36 @@ namespace HamburgerMenu
 
 
 
+        public FontFamily ItemTextFontFamily
+        {
+            get { return (FontFamily)GetValue(ItemTextFontFamilyProperty); }
+            set { SetValue(ItemTextFontFamilyProperty, value); }
+        }
+        public static readonly DependencyProperty ItemTextFontFamilyProperty =
+            DependencyProperty.Register("ItemTextFontFamily", typeof(FontFamily), typeof(NavMenu), new PropertyMetadata(new FontFamily("Arial")));
+
+
+
+
+        public FontWeight ItemTextFontWeight
+        {
+            get { return (FontWeight)GetValue(ItemTextFontWeightProperty); }
+            set { SetValue(ItemTextFontWeightProperty, value); }
+        }
+        public static readonly DependencyProperty ItemTextFontWeightProperty =
+            DependencyProperty.Register("ItemTextFontWeight", typeof(FontWeight), typeof(NavMenu), new PropertyMetadata(FontWeights.Bold));
+
+
+
+        public double ItemTextFontSize
+        {
+            get { return (double)GetValue(ItemTextFontSizeProperty); }
+            set { SetValue(ItemTextFontSizeProperty, value); }
+        }
+        public static readonly DependencyProperty ItemTextFontSizeProperty =
+            DependencyProperty.Register("ItemTextFontSize", typeof(double), typeof(NavMenu), new PropertyMetadata(12.0));
+
+                    
 
 
     }
