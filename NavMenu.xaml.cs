@@ -1,19 +1,14 @@
-﻿using System;
+﻿using HamburgerMenu.Calcs;
+using HamburgerMenu.Events;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace HamburgerMenu
 {
@@ -25,8 +20,10 @@ namespace HamburgerMenu
         public NavMenu()
         {
             InitializeComponent();
+            Root.Loaded += (object sender, RoutedEventArgs e) => { MinCorrectWidth = Root.CalcMinNavMenuCorrectWidth(); };
             Draw(Root);
         }
+
 
         private void Draw(StackPanel root)
         {
@@ -37,6 +34,7 @@ namespace HamburgerMenu
             {
                 CreateNavMenuItem(el, root);
             }
+            
         }
 
         private void CreateNavMenuItem(NavMenuItemData item, Panel toAdd, int offset = 0)
@@ -64,6 +62,7 @@ namespace HamburgerMenu
             TextBlock text = new TextBlock()
             {
                 VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
                 Text = item.Text,
                 Foreground = item.IsSelected ? new SolidColorBrush(SelectedItemTextColor) : new SolidColorBrush(ItemTextColor),
                 FontFamily = ItemTextFontFamily,
@@ -111,7 +110,12 @@ namespace HamburgerMenu
                 text.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, mouseLeaveTextAnimation);
             };
 
-            result.MouseUp += (object sender, MouseButtonEventArgs e) => { sad(item); };
+            MouseClickManager clickManager = new MouseClickManager(200);
+            result.MouseLeftButtonDown += clickManager.OnMouseLeftButtonDown;
+            result.MouseLeftButtonUp += clickManager.OnMouseLeftButtonUp;
+
+            //обработчик кликов во вне
+            clickManager.Click += (object sender, MouseButtonEventArgs e) => { RaiseClickedEvent(item); };
 
 
             toAdd.Children.Add(result);
@@ -172,7 +176,7 @@ namespace HamburgerMenu
 
                 rotateAnimation.Completed += (object sender, EventArgs e) => { isAnimatedNow = false; };
 
-                result.MouseLeftButtonUp += (object sender, MouseButtonEventArgs e) =>
+                clickManager.Click += (object sender, MouseButtonEventArgs e) =>
                 {
                     if (!isAnimatedNow && (sender is Panel senderPanel))
                     {
@@ -224,10 +228,18 @@ namespace HamburgerMenu
             Draw(Root);
         }
 
-        void sad(NavMenuItemData n)
+
+        public static readonly RoutedEvent ClickedEvent = EventManager.RegisterRoutedEvent("Clicked", RoutingStrategy.Bubble, typeof(ClickedEventHandler), typeof(NavMenu));               
+        public event ClickedEventHandler Click
         {
-            System.Threading.Thread.Sleep(1000);
+            add { AddHandler(ClickedEvent, value); }
+            remove { RemoveHandler(ClickedEvent, value); }
         }
+        private void RaiseClickedEvent(NavMenuItemData item)
+        {
+            RaiseEvent(new ClickedEventArgs(ClickedEvent, item));
+        }
+
 
 
         public List<NavMenuItemData> ItemSource
@@ -245,9 +257,7 @@ namespace HamburgerMenu
                 nm.ReDraw();
             }
         }
-
-
-
+               
 
         public int ItemHeight
         {
@@ -423,7 +433,19 @@ namespace HamburgerMenu
         public static readonly DependencyProperty ItemTextFontSizeProperty =
             DependencyProperty.Register("ItemTextFontSize", typeof(double), typeof(NavMenu), new PropertyMetadata(12.0));
 
-                    
+
+
+
+
+        public double MinCorrectWidth
+        {
+            get { return (double)GetValue(MinCorrectWidthProperty); }
+            set { SetValue(MinCorrectWidthProperty, value); }
+        }
+        public static readonly DependencyProperty MinCorrectWidthProperty =
+            DependencyProperty.Register("MinCorrectWidth", typeof(double), typeof(NavMenu), new PropertyMetadata(0.0));
+
+
 
 
     }

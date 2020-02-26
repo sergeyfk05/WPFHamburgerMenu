@@ -48,6 +48,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Calcs\NavMenuItemCalcs.cs" />
+    <Compile Include="Events\ClickedEventArgs.cs" />
+    <Compile Include="Events\ClickedEventHandler.cs" />
+    <Compile Include="MouseClickManager.cs" />
     <Compile Include="NavMenu.xaml.cs">
       <DependentUpon>NavMenu.xaml</DependentUpon>
     </Compile>
