@@ -18,6 +18,35 @@
                 <Setter Property="HorizontalAlignment" Value="Center"/>
                 <Setter Property="VerticalAlignment" Value="Top"/>
             </Style>
+
+            <Storyboard x:Key="HamburgerMenuRectangles_OpenMenu">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="HamburgerMenu_rectangle">
+                    <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationStartTime}" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationEndTime}" Value="43.5"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="HamburgerMenu_rectangle1">
+                    <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationStartTime}" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationEndTime}" Value="-43.5"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="HamburgerMenu_rectangle2">
+                    <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationStartTime}" Value="1"/>
+                    <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationEndTime}" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="HamburgerMenuRectangles_CloseMenu">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="HamburgerMenu_rectangle">
+                    <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationStartTime}" Value="43.5"/>
+                    <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationEndTime}" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="HamburgerMenu_rectangle1">
+                    <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationStartTime}" Value="-43.5"/>
+                    <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationEndTime}" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="HamburgerMenu_rectangle2">
+                    <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationStartTime}" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationEndTime}" Value="1"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -33,29 +62,6 @@
                             <TranslateTransform/>
                         </TransformGroup>
                     </Rectangle.RenderTransform>
-
-                    <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="local:NavMenuToggleButton.Paralleled">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="HamburgerMenu_rectangle">
-                                        <EasingDoubleKeyFrame KeyTime="{TemplateBinding AnimationStartTime}" Value="43.5"/>
-                                        <EasingDoubleKeyFrame KeyTime="{TemplateBinding AnimationEndTime}" Value="0"/>
-                                    </DoubleAnimationUsingKeyFrames>                                    
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="local:NavMenuToggleButton.Crossed">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="HamburgerMenu_rectangle">
-                                        <EasingDoubleKeyFrame KeyTime="{TemplateBinding AnimationStartTime}" Value="0"/>
-                                        <EasingDoubleKeyFrame KeyTime="{TemplateBinding AnimationEndTime}" Value="43.5"/>
-                                    </DoubleAnimationUsingKeyFrames>                                    
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Rectangle.Triggers>
                 </Rectangle>
                 <Rectangle x:Name="HamburgerMenu_rectangle1" Fill="{TemplateBinding Color}" Style="{StaticResource HamburgerMenu_ButtonRectangleStyle}" Margin="0 20 0 0 " RenderTransformOrigin="-0,0.5">
                     <Rectangle.RenderTransform>
@@ -66,79 +72,17 @@
                             <TranslateTransform/>
                         </TransformGroup>
                     </Rectangle.RenderTransform>
-
-                    <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="local:NavMenuToggleButton.Paralleled">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="HamburgerMenu_rectangle1">
-                                        <EasingDoubleKeyFrame KeyTime="{TemplateBinding AnimationStartTime}" Value="-43.5"/>
-                                        <EasingDoubleKeyFrame KeyTime="{TemplateBinding AnimationEndTime}" Value="0"/>
-                                    </DoubleAnimationUsingKeyFrames>                                    
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-
-                        <EventTrigger RoutedEvent="local:NavMenuToggleButton.Crossed">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="HamburgerMenu_rectangle1">
-                                        <EasingDoubleKeyFrame KeyTime="{TemplateBinding AnimationStartTime}" Value="0"/>
-                                        <EasingDoubleKeyFrame KeyTime="{TemplateBinding AnimationEndTime}" Value="-43.5"/>
-                                    </DoubleAnimationUsingKeyFrames>                                    
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Rectangle.Triggers>
                 </Rectangle>
-                <Rectangle x:Name="HamburgerMenu_rectangle2" Fill="{TemplateBinding Color}" Style="{StaticResource HamburgerMenu_ButtonRectangleStyle}" Margin="0 10 0 0" VerticalAlignment="Top">
-                    <Rectangle.Triggers>
-                        <EventTrigger RoutedEvent="local:NavMenuToggleButton.Paralleled">
-                            <BeginStoryboard>
-                                <Storyboard>                                   
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="HamburgerMenu_rectangle2">
-                                        <EasingDoubleKeyFrame KeyTime="{TemplateBinding AnimationStartTime}" Value="0"/>
-                                        <EasingDoubleKeyFrame KeyTime="{TemplateBinding AnimationEndTime}" Value="1"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-
-                        <EventTrigger RoutedEvent="local:NavMenuToggleButton.Crossed">
-                            <BeginStoryboard>
-                                <Storyboard>                                    
-                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="HamburgerMenu_rectangle2">
-                                        <EasingDoubleKeyFrame KeyTime="{TemplateBinding AnimationStartTime}" Value="1"/>
-                                        <EasingDoubleKeyFrame KeyTime="{TemplateBinding AnimationEndTime}" Value="0"/>
-                                    </DoubleAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Rectangle.Triggers>
-                </Rectangle>
+                <Rectangle x:Name="HamburgerMenu_rectangle2" Fill="{TemplateBinding Color}" Style="{StaticResource HamburgerMenu_ButtonRectangleStyle}" Margin="0 10 0 0" VerticalAlignment="Top"/>
             </Grid>
 
             <ControlTemplate.Triggers>
                 <EventTrigger RoutedEvent="local:NavMenuToggleButton.Paralleled">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="HamburgerMenu_rectangle2">
-                                <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationStartTime}" Value="0"/>
-                                <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationEndTime}" Value="1"/>
-                            </DoubleAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </BeginStoryboard>
+                    <BeginStoryboard Storyboard="{StaticResource HamburgerMenuRectangles_CloseMenu}"/>
                 </EventTrigger>
 
                 <EventTrigger RoutedEvent="local:NavMenuToggleButton.Crossed">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="HamburgerMenu_rectangle2">
-                                <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationStartTime}" Value="1"/>
-                                <EasingDoubleKeyFrame KeyTime="{StaticResource AnimationEndTime}" Value="0"/>
-                            </DoubleAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </BeginStoryboard>
+                    <BeginStoryboard Storyboard="{StaticResource HamburgerMenuRectangles_OpenMenu}"/>
                 </EventTrigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>

@@ -8,9 +8,9 @@ using System.Windows.Controls;
 
 namespace HamburgerMenu.Calcs
 {
-    public static class NavMenuItemCalcs
+    internal static class NavMenuItemCalcs
     {
-        public static double CalcMinNavMenuCorrectWidth(this StackPanel root)
+        internal static double CalcMinNavMenuCorrectWidth(this StackPanel root)
         {
             double result = 0;
             foreach (var el in root.Children)
@@ -32,7 +32,7 @@ namespace HamburgerMenu.Calcs
             return result;
         }
 
-        private static double CalcMinItemCorrectWidth(this DockPanel panel)
+        internal static double CalcMinItemCorrectWidth(this DockPanel panel)
         {
             double result = 0;
             foreach (var el in panel.Children)

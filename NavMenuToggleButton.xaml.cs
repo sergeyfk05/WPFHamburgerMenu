@@ -9,7 +9,6 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -24,15 +23,7 @@ namespace HamburgerMenu
         public NavMenuToggleButton()
         {
             InitializeComponent();
-            this.Loaded += NavMenuToggleButton_Loaded;
         }
-
-        private void NavMenuToggleButton_Loaded(object sender, RoutedEventArgs e)
-        {
-            IsParallel = false;
-        }
-
-
         #region properties
 
         /// <summary>
@@ -59,35 +50,6 @@ namespace HamburgerMenu
         }
         public static readonly DependencyProperty IsParallelProperty =
             DependencyProperty.Register("IsParallel", typeof(bool), typeof(NavMenuToggleButton), new UIPropertyMetadata(true, OnIsParallelChanged));
-
-
-
-
-
-
-        public TimeSpan AnimationStartTime
-        {
-            get { return (TimeSpan)GetValue(AnimationStartTimeProperty); }
-            set { SetValue(AnimationStartTimeProperty, value); }
-        }
-        public static readonly DependencyProperty AnimationStartTimeProperty =
-            DependencyProperty.Register("AnimationStartTime", typeof(TimeSpan), typeof(NavMenuToggleButton), new PropertyMetadata(TimeSpan.FromMilliseconds(0)));
-
-
-
-        public TimeSpan AnimationEndTime
-        {
-            get { return (TimeSpan)GetValue(AnimationEndTimeProperty); }
-            set { SetValue(AnimationEndTimeProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for AnimationEndTime.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty AnimationEndTimeProperty =
-            DependencyProperty.Register("AnimationEndTime", typeof(TimeSpan), typeof(NavMenuToggleButton), new PropertyMetadata(TimeSpan.FromMilliseconds(500)));
-
-
-
-
 
         #endregion
 
@@ -139,6 +101,5 @@ namespace HamburgerMenu
         }
 
         #endregion
-
     }
 }
