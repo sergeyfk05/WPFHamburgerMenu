@@ -55,6 +55,9 @@
     <Compile Include="NavMenu.xaml.cs">
       <DependentUpon>NavMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NavMenuItem.xaml.cs">
+      <DependentUpon>NavMenuItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NavMenuItemData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -82,6 +85,10 @@
     <Page Include="NavMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NavMenuItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
