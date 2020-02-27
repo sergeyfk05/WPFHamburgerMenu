@@ -20,7 +20,12 @@ namespace HamburgerMenu
             MaxDelay = maxDelay;
         }
 
-        public MouseClickManager(Func<bool> canExecute)
+        public MouseClickManager(Func<bool> canExecute) : this(200)
+        {
+            _canExecute = canExecute;
+        }
+
+        public MouseClickManager(int maxDelay, Func<bool> canExecute) : this(maxDelay)
         {
             _canExecute = canExecute;
         }
