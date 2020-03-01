@@ -31,10 +31,10 @@ namespace HamburgerMenu
 
         private void HamburgerMenu_Loaded(object sender, RoutedEventArgs e)
         {
-            Width = CollapsedWidth;
-
             if (sender is HamburgerMenu hm)
             {
+                Width = CollapsedWidth;
+
                 if (hm.Template.FindName("ToggleButton", hm) is NavMenuToggleButton button)
                 {
                     button.Clicked += (object senderL, RoutedEventArgs eL) =>
@@ -131,7 +131,7 @@ namespace HamburgerMenu
 
         private static void OnIsCollapsedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is HamburgerMenu hm)
+            if (d is HamburgerMenu hm && hm.IsLoaded)
             {
                 if (hm.IsCollapsed)
                 {
@@ -170,7 +170,7 @@ namespace HamburgerMenu
 
         private static void OnWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is HamburgerMenu sender)
+            if (d is HamburgerMenu sender && sender.IsLoaded)
             {
                 if (sender.Template.FindName("Root", sender) is DockPanel panel)
                 {
