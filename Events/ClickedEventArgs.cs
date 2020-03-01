@@ -12,9 +12,9 @@ namespace HamburgerMenu.Events
         public ClickedEventArgs(RoutedEvent routedEvent, NavMenuItemData item) 
             : base(routedEvent)
         {
-            clickedItem = item;
+            ClickedItem = item;
         }
 
-        public NavMenuItemData clickedItem { get; private set; }
+        public NavMenuItemData ClickedItem { get; private set; }
     }
 }

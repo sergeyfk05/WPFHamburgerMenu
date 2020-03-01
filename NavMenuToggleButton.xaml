@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <presentation:KeyTime x:Key="AnimationStartTime">0</presentation:KeyTime>
-            <presentation:KeyTime x:Key="AnimationEndTime">0:0:0.5</presentation:KeyTime>
+            <presentation:KeyTime x:Key="AnimationEndTime">0:0:0.35</presentation:KeyTime>
 
             <Style x:Key="HamburgerMenu_ButtonRectangleStyle" TargetType="Rectangle">
                 <Setter Property="Width" Value="30"/>

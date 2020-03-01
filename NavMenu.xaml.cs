@@ -252,7 +252,7 @@ namespace HamburgerMenu
 
 
         public static readonly RoutedEvent ClickedEvent = EventManager.RegisterRoutedEvent("Clicked", RoutingStrategy.Bubble, typeof(ClickedEventHandler), typeof(NavMenu));               
-        public event ClickedEventHandler Click
+        public event ClickedEventHandler Clicked
         {
             add { AddHandler(ClickedEvent, value); }
             remove { RemoveHandler(ClickedEvent, value); }
@@ -279,7 +279,15 @@ namespace HamburgerMenu
                 nm.ReDraw();
             }
         }
-               
+
+
+        private static void OnRedraw(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is NavMenu nm)
+            {
+                nm.ReDraw();
+            }
+        }
 
         public int ItemHeight
         {
@@ -287,7 +295,7 @@ namespace HamburgerMenu
             set { SetValue(ItemHeightProperty, value); }
         }
         public static readonly DependencyProperty ItemHeightProperty =
-            DependencyProperty.Register("ItemHeight", typeof(int), typeof(NavMenu), new PropertyMetadata(30));
+            DependencyProperty.Register("ItemHeight", typeof(int), typeof(NavMenu), new UIPropertyMetadata(30, OnRedraw));
 
 
 
@@ -297,7 +305,7 @@ namespace HamburgerMenu
             set { SetValue(IconSizeProperty, value); }
         }
         public static readonly DependencyProperty IconSizeProperty =
-            DependencyProperty.Register("IconSize", typeof(int), typeof(NavMenu), new PropertyMetadata(20));
+            DependencyProperty.Register("IconSize", typeof(int), typeof(NavMenu), new UIPropertyMetadata(20, OnRedraw));
 
 
 
@@ -307,7 +315,7 @@ namespace HamburgerMenu
             set { SetValue(BackgroundProperty, value); }
         }
         public static readonly DependencyProperty BackgroundProperty =
-            DependencyProperty.Register("Background", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(0, 255, 0)));
+            DependencyProperty.Register("Background", typeof(Color), typeof(NavMenu), new UIPropertyMetadata(Color.FromRgb(0, 255, 0), OnRedraw));
 
 
 
@@ -317,7 +325,7 @@ namespace HamburgerMenu
             set { SetValue(MouseInItemBackgroundProperty, value); }
         }
         public static readonly DependencyProperty MouseInItemBackgroundProperty =
-            DependencyProperty.Register("MouseInItemBackground", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(155, 155, 155)));
+            DependencyProperty.Register("MouseInItemBackground", typeof(Color), typeof(NavMenu), new UIPropertyMetadata(Color.FromRgb(155, 155, 155), OnRedraw));
 
 
 
@@ -347,7 +355,7 @@ namespace HamburgerMenu
             set { SetValue(SelectedItemBackgroundProperty, value); }
         }
         public static readonly DependencyProperty SelectedItemBackgroundProperty =
-            DependencyProperty.Register("SelectedItemBackground", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(100, 100, 100)));
+            DependencyProperty.Register("SelectedItemBackground", typeof(Color), typeof(NavMenu), new UIPropertyMetadata(Color.FromRgb(100, 100, 100), OnRedraw));
 
 
 
@@ -358,7 +366,7 @@ namespace HamburgerMenu
             set { SetValue(DropdownMenuLeftOffsetProperty, value); }
         }
         public static readonly DependencyProperty DropdownMenuLeftOffsetProperty =
-            DependencyProperty.Register("DropdownMenuLeftOffset", typeof(int), typeof(NavMenu), new PropertyMetadata(20));
+            DependencyProperty.Register("DropdownMenuLeftOffset", typeof(int), typeof(NavMenu), new UIPropertyMetadata(20, OnRedraw));
 
 
 
@@ -368,7 +376,7 @@ namespace HamburgerMenu
             set { SetValue(DropdownMenuFunctionProperty, value); }
         }
         public static readonly DependencyProperty DropdownMenuFunctionProperty =
-            DependencyProperty.Register("DropdownMenuFunction", typeof(IEasingFunction), typeof(NavMenu), new PropertyMetadata(new CircleEase()));
+            DependencyProperty.Register("DropdownMenuFunction", typeof(IEasingFunction), typeof(NavMenu), new UIPropertyMetadata(new CircleEase(), OnRedraw));
 
 
 
@@ -379,7 +387,7 @@ namespace HamburgerMenu
             set { SetValue(DropdownIconSizeProperty, value); }
         }   
         public static readonly DependencyProperty DropdownIconSizeProperty =
-            DependencyProperty.Register("DropdownIconSize", typeof(int), typeof(NavMenu), new PropertyMetadata(10));
+            DependencyProperty.Register("DropdownIconSize", typeof(int), typeof(NavMenu), new UIPropertyMetadata(10, OnRedraw));
 
 
 
@@ -389,7 +397,7 @@ namespace HamburgerMenu
             set { SetValue(DropdownIconSourceProperty, value); }
         }
         public static readonly DependencyProperty DropdownIconSourceProperty =
-            DependencyProperty.Register("DropdownIconSource", typeof(Uri), typeof(NavMenu), new PropertyMetadata(new Uri(new Uri(Assembly.GetExecutingAssembly().Location), "1.png")));
+            DependencyProperty.Register("DropdownIconSource", typeof(Uri), typeof(NavMenu), new UIPropertyMetadata(new Uri(new Uri(Assembly.GetExecutingAssembly().Location), "1.png"), OnRedraw));
 
 
 
@@ -400,7 +408,7 @@ namespace HamburgerMenu
             set { SetValue(ItemTextColorProperty, value); }
         }
         public static readonly DependencyProperty ItemTextColorProperty =
-            DependencyProperty.Register("ItemTextColor", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(0, 0, 0)));
+            DependencyProperty.Register("ItemTextColor", typeof(Color), typeof(NavMenu), new UIPropertyMetadata(Color.FromRgb(0, 0, 0), OnRedraw));
 
 
 
@@ -410,7 +418,7 @@ namespace HamburgerMenu
             set { SetValue(MouseInItemTextColorProperty, value); }
         }
         public static readonly DependencyProperty MouseInItemTextColorProperty =
-            DependencyProperty.Register("MouseInItemTextColor", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(0, 255, 0)));
+            DependencyProperty.Register("MouseInItemTextColor", typeof(Color), typeof(NavMenu), new UIPropertyMetadata(Color.FromRgb(0, 255, 0), OnRedraw));
 
 
 
@@ -421,7 +429,7 @@ namespace HamburgerMenu
             set { SetValue(SelectedItemTextColorProperty, value); }
         }
         public static readonly DependencyProperty SelectedItemTextColorProperty =
-            DependencyProperty.Register("SelectedItemTextColor", typeof(Color), typeof(NavMenu), new PropertyMetadata(Color.FromRgb(0, 0, 255)));
+            DependencyProperty.Register("SelectedItemTextColor", typeof(Color), typeof(NavMenu), new UIPropertyMetadata(Color.FromRgb(0, 0, 255), OnRedraw));
 
 
 
@@ -432,7 +440,7 @@ namespace HamburgerMenu
             set { SetValue(ItemTextFontFamilyProperty, value); }
         }
         public static readonly DependencyProperty ItemTextFontFamilyProperty =
-            DependencyProperty.Register("ItemTextFontFamily", typeof(FontFamily), typeof(NavMenu), new PropertyMetadata(new FontFamily("Arial")));
+            DependencyProperty.Register("ItemTextFontFamily", typeof(FontFamily), typeof(NavMenu), new UIPropertyMetadata(new FontFamily("Arial"), OnRedraw));
 
 
 
@@ -443,7 +451,7 @@ namespace HamburgerMenu
             set { SetValue(ItemTextFontWeightProperty, value); }
         }
         public static readonly DependencyProperty ItemTextFontWeightProperty =
-            DependencyProperty.Register("ItemTextFontWeight", typeof(FontWeight), typeof(NavMenu), new PropertyMetadata(FontWeights.Bold));
+            DependencyProperty.Register("ItemTextFontWeight", typeof(FontWeight), typeof(NavMenu), new UIPropertyMetadata(FontWeights.Bold, OnRedraw));
 
 
 
@@ -453,7 +461,7 @@ namespace HamburgerMenu
             set { SetValue(ItemTextFontSizeProperty, value); }
         }
         public static readonly DependencyProperty ItemTextFontSizeProperty =
-            DependencyProperty.Register("ItemTextFontSize", typeof(double), typeof(NavMenu), new PropertyMetadata(12.0));
+            DependencyProperty.Register("ItemTextFontSize", typeof(double), typeof(NavMenu), new UIPropertyMetadata(12.0, OnRedraw));
 
 
 
@@ -468,23 +476,13 @@ namespace HamburgerMenu
             DependencyProperty.Register("MinCorrectWidth", typeof(double), typeof(NavMenu), new PropertyMetadata(0.0));
 
 
-
-
         public double DropdownIconSectionWidth
         {
             get { return (double)GetValue(DropdownIconSectionWidthProperty); }
             set { SetValue(DropdownIconSectionWidthProperty, value); }
         }
         public static readonly DependencyProperty DropdownIconSectionWidthProperty =
-            DependencyProperty.Register("DropdownIconSectionWidth", typeof(double), typeof(HamburgerMenu), new UIPropertyMetadata(50.0, OnDropdownIconSectionWidthChanged));
-
-        private static void OnDropdownIconSectionWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is NavMenu nm)
-            {
-                nm.ReDraw();
-            }
-        }
+            DependencyProperty.Register("DropdownIconSectionWidth", typeof(double), typeof(NavMenu), new UIPropertyMetadata(100.0, OnRedraw));
 
 
 
@@ -493,10 +491,8 @@ namespace HamburgerMenu
             get { return (double)GetValue(DropdownIconMinLeftOffsetProperty); }
             set { SetValue(DropdownIconMinLeftOffsetProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for DropdownIconMinLeftOffset.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DropdownIconMinLeftOffsetProperty =
-            DependencyProperty.Register("DropdownIconMinLeftOffset", typeof(double), typeof(NavMenu), new PropertyMetadata(30.0));
+            DependencyProperty.Register("DropdownIconMinLeftOffset", typeof(double), typeof(NavMenu), new UIPropertyMetadata(30.0, OnRedraw));
 
 
 

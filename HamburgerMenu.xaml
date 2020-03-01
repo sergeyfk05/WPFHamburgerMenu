@@ -14,11 +14,27 @@
                 </StackPanel>
 
                 <DockPanel DockPanel.Dock="Top">
-                    <local:NavMenu x:Name="TopNavMenu" ItemSource="{TemplateBinding TopNavMenuItemSource}" IsEnabled="{TemplateBinding NavMenusIsEnabled}"/>
+                    <local:NavMenu x:Name="TopNavMenu" ItemSource="{TemplateBinding TopNavMenuItemSource}" IsEnabled="{TemplateBinding NavMenusIsEnabled}" 
+                                   MouseInOverAnimationDuration="{TemplateBinding NavMenuItemMouseInOverAnimationDuration}" DropdownMenuAnimationDuration="{TemplateBinding DropdownNavMenuAnimationDuration}" 
+                                   DropdownMenuFunction="{TemplateBinding AnimationFunction}" DropdownIconSectionWidth="{TemplateBinding CollapsedWidth}"
+                                   ItemHeight="{TemplateBinding TopNavMenuItemHeight}" IconSize="{TemplateBinding TopNavMenuItemIconSize}" Background="{TemplateBinding NavMenuBackground}" 
+                                   MouseInItemBackground="{TemplateBinding NavMenuMouseInItemBackground}" SelectedItemBackground="{TemplateBinding NavMenuSelectedItemBackground}" 
+                                   DropdownMenuLeftOffset="{TemplateBinding NavMenuDropdownIconLeftOffset}" DropdownIconSize="{TemplateBinding NavMenuDropdownIconSize}" DropdownIconSource="{TemplateBinding NavMenuDropdownIconSource}" 
+                                   ItemTextColor="{TemplateBinding NavMenuItemTextColor}" MouseInItemTextColor="{TemplateBinding NavMenuMouseInItemTextColor}" SelectedItemTextColor="{TemplateBinding NavMenuSelectedItemTextColor}"
+                                   ItemTextFontFamily="{TemplateBinding NavMenuItemTextFontFamily}" ItemTextFontWeight="{TemplateBinding NavMenuItemTextFontWeight}" ItemTextFontSize="{TemplateBinding NavMenuItemTextFontSize}"
+                                   DropdownIconMinLeftOffset="{TemplateBinding NavMenuDropdownIconMinLeftOffset}" Clicked="NavMenu_Click"/>
                 </DockPanel>
 
                 <DockPanel  DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
-                    <local:NavMenu x:Name="BottomNavMenu" ItemSource="{TemplateBinding BottomNavMenuItemSource}"/>
+                    <local:NavMenu x:Name="BottomNavMenu" ItemSource="{TemplateBinding BottomNavMenuItemSource}" 
+                                   MouseInOverAnimationDuration="{TemplateBinding NavMenuItemMouseInOverAnimationDuration}" DropdownMenuAnimationDuration="{TemplateBinding DropdownNavMenuAnimationDuration}" 
+                                   DropdownMenuFunction="{TemplateBinding AnimationFunction}" DropdownIconSectionWidth="{TemplateBinding CollapsedWidth}"
+                                   ItemHeight="{TemplateBinding BottomNavMenuItemHeight}" IconSize="{TemplateBinding BottomNavMenuItemIconSize}" Background="{TemplateBinding NavMenuBackground}"
+                                   MouseInItemBackground="{TemplateBinding NavMenuMouseInItemBackground}" SelectedItemBackground="{TemplateBinding NavMenuSelectedItemBackground}"
+                                   DropdownMenuLeftOffset="{TemplateBinding NavMenuDropdownIconLeftOffset}" DropdownIconSize="{TemplateBinding NavMenuDropdownIconSize}" DropdownIconSource="{TemplateBinding NavMenuDropdownIconSource}"
+                                   ItemTextColor="{TemplateBinding NavMenuItemTextColor}" MouseInItemTextColor="{TemplateBinding NavMenuMouseInItemTextColor}" SelectedItemTextColor="{TemplateBinding NavMenuSelectedItemTextColor}"
+                                   ItemTextFontFamily="{TemplateBinding NavMenuItemTextFontFamily}" ItemTextFontWeight="{TemplateBinding NavMenuItemTextFontWeight}" ItemTextFontSize="{TemplateBinding NavMenuItemTextFontSize}"
+                                   DropdownIconMinLeftOffset="{TemplateBinding NavMenuDropdownIconMinLeftOffset}" Clicked="NavMenu_Click"/>
                 </DockPanel>
             </DockPanel>
         </ControlTemplate>
