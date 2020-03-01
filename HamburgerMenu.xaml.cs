@@ -27,59 +27,31 @@ namespace HamburgerMenu
         {
             InitializeComponent();
             this.Loaded += HamburgerMenu_Loaded;
-
-            
         }
 
         private void HamburgerMenu_Loaded(object sender, RoutedEventArgs e)
         {
             Width = CollapsedWidth;
 
-            if(sender is HamburgerMenu hm)
+            if (sender is HamburgerMenu hm)
             {
                 if (hm.Template.FindName("ToggleButton", hm) is NavMenuToggleButton button)
                 {
-                    button.Clicked += (object senderL, RoutedEventArgs eL) => 
+                    button.Clicked += (object senderL, RoutedEventArgs eL) =>
                     {
                         IsCollapsed = !IsCollapsed;
-
-                        if(IsCollapsed)
-                        {
-                            Width = CollapsedWidth;
-                        }
-                        else
-                        {
-                            double newWidth = CollapsedWidth;
-                            if (hm.Template.FindName("TopNavMenu", hm) is NavMenu topNavMenu && newWidth < topNavMenu.MinCorrectWidth)
-                            {
-                                newWidth = topNavMenu.MinCorrectWidth;
-                            }
-
-
-                            if (hm.Template.FindName("BottomNavMenu", hm) is NavMenu bottomNavMenu && newWidth < bottomNavMenu.MinCorrectWidth)
-                            {
-                                newWidth = bottomNavMenu.MinCorrectWidth;
-                            }
-
-                            Width = newWidth;
-                            
-                        }
-
-                        NavMenusIsEnabled = !IsCollapsed;
-
-
                     };
                 }
             }
         }
+
+
 
         public Brush ToggleButtonBackground
         {
             get { return (Brush)GetValue(ToggleButtonBackgroundProperty); }
             set { SetValue(ToggleButtonBackgroundProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for ToggleButtonBackground.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ToggleButtonBackgroundProperty =
             DependencyProperty.Register("ToggleButtonBackground", typeof(Brush), typeof(HamburgerMenu), new PropertyMetadata(new SolidColorBrush(Color.FromRgb(255, 0, 0))));
 
@@ -90,8 +62,6 @@ namespace HamburgerMenu
             get { return (Brush)GetValue(ToggleButtonColorProperty); }
             set { SetValue(ToggleButtonColorProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for ToggleButtonColor.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ToggleButtonColorProperty =
             DependencyProperty.Register("ToggleButtonColor", typeof(Brush), typeof(HamburgerMenu), new PropertyMetadata(new SolidColorBrush(Color.FromRgb(0, 255, 0))));
 
@@ -102,8 +72,6 @@ namespace HamburgerMenu
             get { return (bool)GetValue(NavMenusIsEnabledProperty); }
             set { SetValue(NavMenusIsEnabledProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NavMenusIsEnabled.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NavMenusIsEnabledProperty =
             DependencyProperty.Register("NavMenusIsEnabled", typeof(bool), typeof(HamburgerMenu), new PropertyMetadata(false));
 
@@ -125,8 +93,6 @@ namespace HamburgerMenu
             get { return (double)GetValue(ToggleButtonBlockHeightProperty); }
             set { SetValue(ToggleButtonBlockHeightProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for ToggleButtonBlockHeight.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ToggleButtonBlockHeightProperty =
             DependencyProperty.Register("ToggleButtonBlockHeight", typeof(double), typeof(HamburgerMenu), new PropertyMetadata(50.0));
 
@@ -138,8 +104,6 @@ namespace HamburgerMenu
             get { return (List<NavMenuItemData>)GetValue(TopNavMenuItemSourceProperty); }
             set { SetValue(TopNavMenuItemSourceProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for TopNavMenuItemSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TopNavMenuItemSourceProperty =
             DependencyProperty.Register("TopNavMenuItemSource", typeof(List<NavMenuItemData>), typeof(HamburgerMenu), new PropertyMetadata(null));
 
@@ -150,8 +114,6 @@ namespace HamburgerMenu
             get { return (List<NavMenuItemData>)GetValue(BottomNavMenuItemSourceProperty); }
             set { SetValue(BottomNavMenuItemSourceProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for BottomNavMenuItemSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty BottomNavMenuItemSourceProperty =
             DependencyProperty.Register("BottomNavMenuItemSource", typeof(List<NavMenuItemData>), typeof(HamburgerMenu), new PropertyMetadata(null));
 
@@ -164,12 +126,38 @@ namespace HamburgerMenu
             get { return (bool)GetValue(IsCollapsedProperty); }
             set { SetValue(IsCollapsedProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for IsCollapsed.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IsCollapsedProperty =
-            DependencyProperty.Register("IsCollapsed", typeof(bool), typeof(HamburgerMenu), new PropertyMetadata(true));
+            DependencyProperty.Register("IsCollapsed", typeof(bool), typeof(HamburgerMenu), new UIPropertyMetadata(true, OnIsCollapsedChanged));
+
+        private static void OnIsCollapsedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is HamburgerMenu hm)
+            {
+                if (hm.IsCollapsed)
+                {
+                    hm.Width = hm.CollapsedWidth;
+                }
+                else
+                {
+                    double newWidth = hm.CollapsedWidth;
+                    if (hm.Template.FindName("TopNavMenu", hm) is NavMenu topNavMenu && newWidth < topNavMenu.MinCorrectWidth)
+                    {
+                        newWidth = topNavMenu.MinCorrectWidth;
+                    }
 
 
+                    if (hm.Template.FindName("BottomNavMenu", hm) is NavMenu bottomNavMenu && newWidth < bottomNavMenu.MinCorrectWidth)
+                    {
+                        newWidth = bottomNavMenu.MinCorrectWidth;
+                    }
+
+                    hm.Width = newWidth;
+
+                }
+
+                hm.NavMenusIsEnabled = !hm.IsCollapsed;
+            }
+        }
 
 
         public double Width
@@ -177,8 +165,6 @@ namespace HamburgerMenu
             get { return (double)GetValue(WidthProperty); }
             set { SetValue(WidthProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for Width.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty WidthProperty =
             DependencyProperty.Register("Width", typeof(double), typeof(HamburgerMenu), new UIPropertyMetadata(0.0, OnWidthChanged));
 
@@ -249,8 +235,6 @@ namespace HamburgerMenu
             get { return (double)GetValue(BottomNavMenuItemHeightProperty); }
             set { SetValue(BottomNavMenuItemHeightProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for BottomNavMenuItemHeight.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty BottomNavMenuItemHeightProperty =
             DependencyProperty.Register("BottomNavMenuItemHeight", typeof(double), typeof(HamburgerMenu), new PropertyMetadata(30.0));
 
@@ -272,8 +256,6 @@ namespace HamburgerMenu
             get { return (double)GetValue(BottomNavMenuItemIconSizeProperty); }
             set { SetValue(BottomNavMenuItemIconSizeProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for BottomNavMenuItemIconSize.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty BottomNavMenuItemIconSizeProperty =
             DependencyProperty.Register("BottomNavMenuItemIconSize", typeof(double), typeof(HamburgerMenu), new PropertyMetadata(20.0));
 
@@ -296,7 +278,7 @@ namespace HamburgerMenu
             set { SetValue(NavMenuMouseInItemBackgroundProperty, value); }
         }
         public static readonly DependencyProperty NavMenuMouseInItemBackgroundProperty =
-            DependencyProperty.Register("NavMenuMouseInItemBackground", typeof(Color), typeof(HamburgerMenu), new PropertyMetadata(Color.FromRgb(125,0,0)));
+            DependencyProperty.Register("NavMenuMouseInItemBackground", typeof(Color), typeof(HamburgerMenu), new PropertyMetadata(Color.FromRgb(125, 0, 0)));
 
 
 
@@ -345,10 +327,8 @@ namespace HamburgerMenu
             get { return (Color)GetValue(NavMenuItemTextColorProperty); }
             set { SetValue(NavMenuItemTextColorProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NavMenuItemTextColor.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NavMenuItemTextColorProperty =
-            DependencyProperty.Register("NavMenuItemTextColor", typeof(Color), typeof(HamburgerMenu), new PropertyMetadata(Color.FromRgb(0,0,255)));
+            DependencyProperty.Register("NavMenuItemTextColor", typeof(Color), typeof(HamburgerMenu), new PropertyMetadata(Color.FromRgb(0, 0, 255)));
 
 
 
@@ -357,8 +337,6 @@ namespace HamburgerMenu
             get { return (Color)GetValue(NavMenuMouseInItemTextColorProperty); }
             set { SetValue(NavMenuMouseInItemTextColorProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NavMenuMouseInItemTextColor.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NavMenuMouseInItemTextColorProperty =
             DependencyProperty.Register("NavMenuMouseInItemTextColor", typeof(Color), typeof(HamburgerMenu), new PropertyMetadata(Color.FromRgb(0, 0, 255)));
 
@@ -369,8 +347,6 @@ namespace HamburgerMenu
             get { return (Color)GetValue(NavMenuSelectedItemTextColorProperty); }
             set { SetValue(NavMenuSelectedItemTextColorProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NavMenuSelectedItemTextColor.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NavMenuSelectedItemTextColorProperty =
             DependencyProperty.Register("NavMenuSelectedItemTextColor", typeof(Color), typeof(HamburgerMenu), new PropertyMetadata(Color.FromRgb(0, 0, 255)));
 
@@ -382,8 +358,6 @@ namespace HamburgerMenu
             get { return (FontWeight)GetValue(NavMenuItemTextFontWeightProperty); }
             set { SetValue(NavMenuItemTextFontWeightProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NavMenuItemTextFontWeight.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NavMenuItemTextFontWeightProperty =
             DependencyProperty.Register("NavMenuItemTextFontWeight", typeof(FontWeight), typeof(HamburgerMenu), new PropertyMetadata(FontWeights.Bold));
 
@@ -395,8 +369,6 @@ namespace HamburgerMenu
             get { return (FontFamily)GetValue(NavMenuItemTextFontFamilyProperty); }
             set { SetValue(NavMenuItemTextFontFamilyProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NavMenuItemTextFontFamily.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NavMenuItemTextFontFamilyProperty =
             DependencyProperty.Register("NavMenuItemTextFontFamily", typeof(FontFamily), typeof(HamburgerMenu), new PropertyMetadata(new FontFamily("Arial")));
 
@@ -408,8 +380,6 @@ namespace HamburgerMenu
             get { return (double)GetValue(NavMenuItemTextFontSizeProperty); }
             set { SetValue(NavMenuItemTextFontSizeProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NavMenuItemTextFontSize.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NavMenuItemTextFontSizeProperty =
             DependencyProperty.Register("NavMenuItemTextFontSize", typeof(double), typeof(HamburgerMenu), new PropertyMetadata(10.0));
 
@@ -421,8 +391,6 @@ namespace HamburgerMenu
             get { return (double)GetValue(NavMenuDropdownIconMinLeftOffsetProperty); }
             set { SetValue(NavMenuDropdownIconMinLeftOffsetProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NavMenuDropdownIconMinLeftOffset.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NavMenuDropdownIconMinLeftOffsetProperty =
             DependencyProperty.Register("NavMenuDropdownIconMinLeftOffset", typeof(double), typeof(HamburgerMenu), new PropertyMetadata(15.0));
 
