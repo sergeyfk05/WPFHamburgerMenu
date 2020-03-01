@@ -52,7 +52,7 @@ namespace HamburgerMenu
             {
                 Height = IconSize,
                 Width = IconSize,
-                Margin = new Thickness((ItemHeight - IconSize) / 2 + offset, (ItemHeight - IconSize) / 2, (ItemHeight - IconSize) / 2, (ItemHeight - IconSize) / 2),
+                Margin = new Thickness((DropdownIconSectionWidth - IconSize) / 2 + offset, (ItemHeight - IconSize) / 2, (DropdownIconSectionWidth - IconSize) / 2, (ItemHeight - IconSize) / 2),
                 Source = new BitmapImage(item.ImageSource)
             };
             DockPanel.SetDock(icon, Dock.Left);
@@ -88,6 +88,9 @@ namespace HamburgerMenu
             };
             result.MouseEnter += (object sender, MouseEventArgs e) => 
             {
+                if (!this.IsEnabled)
+                    return;
+
                 result.Background.BeginAnimation(SolidColorBrush.ColorProperty, mouseEnterAnimation);
                 text.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, mouseEnterTextAnimation);
             };
@@ -106,11 +109,14 @@ namespace HamburgerMenu
             };
             result.MouseLeave += (object sender, MouseEventArgs e) => 
             {
+                if (!this.IsEnabled)
+                    return;
+
                 result.Background.BeginAnimation(SolidColorBrush.ColorProperty, mouseLeaveAnimation);
                 text.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, mouseLeaveTextAnimation);
             };
 
-            MouseClickManager clickManager = new MouseClickManager(200);
+            MouseClickManager clickManager = new MouseClickManager(200, () => { return this.IsEnabled; });
             result.MouseLeftButtonDown += clickManager.OnMouseLeftButtonDown;
             result.MouseLeftButtonUp += clickManager.OnMouseLeftButtonUp;
 
@@ -131,7 +137,12 @@ namespace HamburgerMenu
                 {
                     Height = DropdownIconSize,
                     Width = DropdownIconSize,
-                    Margin = new Thickness((ItemHeight - DropdownIconSize) / 2),
+                    Margin = 
+                    new Thickness((ItemHeight - DropdownIconSize) / 2 > DropdownIconMinLeftOffset ? (ItemHeight - DropdownIconSize) / 2 : DropdownIconMinLeftOffset, 
+                    (ItemHeight - DropdownIconSize) / 2, 
+                    (ItemHeight - DropdownIconSize) / 2, 
+                    (ItemHeight - DropdownIconSize) / 2),
+
                     HorizontalAlignment = HorizontalAlignment.Right,
                     Source = new BitmapImage(DropdownIconSource),
                     RenderTransform = new RotateTransform(0, DropdownIconSize / 2, DropdownIconSize / 2),
@@ -152,12 +163,14 @@ namespace HamburgerMenu
                     MaxHeight = 0
                 };
 
+
+
                 foreach (var el in item.DropdownItems)
                 {
                     CreateNavMenuItem(el, dropdownMenu, offset + DropdownMenuLeftOffset);
                 }
 
-
+                
                 DoubleAnimation dropupAnimation = new DoubleAnimation()
                 {
                     Duration = DropdownMenuAnimationDuration,
@@ -169,7 +182,15 @@ namespace HamburgerMenu
                 dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(DropdownMenuAnimationDuration.Milliseconds - 1)), EasingFunction = DropdownMenuFunction });
                 dropdownAnimation.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = KeyTime.FromTimeSpan(DropdownMenuAnimationDuration), Value = 100000 });
 
-
+                this.IsEnabledChanged += (object sender, DependencyPropertyChangedEventArgs e) =>
+                {
+                    if (!(bool)e.NewValue && dropdownMenu.MaxHeight > 0)
+                    {
+                        dropupAnimation.From = dropdownMenu.RenderSize.Height;
+                        dropupAnimation.To = 0;
+                        dropdownMenu.BeginAnimation(Panel.MaxHeightProperty, dropupAnimation);
+                    }
+                };
 
 
                 #region обработчик кликов для скрытия/раскрытия меню
@@ -178,6 +199,7 @@ namespace HamburgerMenu
 
                 clickManager.Click += (object sender, MouseButtonEventArgs e) =>
                 {
+
                     if (!isAnimatedNow && (sender is Panel senderPanel))
                     {
                         if (senderPanel.Parent is Panel parentPanel)
@@ -445,6 +467,36 @@ namespace HamburgerMenu
         public static readonly DependencyProperty MinCorrectWidthProperty =
             DependencyProperty.Register("MinCorrectWidth", typeof(double), typeof(NavMenu), new PropertyMetadata(0.0));
 
+
+
+
+        public double DropdownIconSectionWidth
+        {
+            get { return (double)GetValue(DropdownIconSectionWidthProperty); }
+            set { SetValue(DropdownIconSectionWidthProperty, value); }
+        }
+        public static readonly DependencyProperty DropdownIconSectionWidthProperty =
+            DependencyProperty.Register("DropdownIconSectionWidth", typeof(double), typeof(HamburgerMenu), new UIPropertyMetadata(50.0, OnDropdownIconSectionWidthChanged));
+
+        private static void OnDropdownIconSectionWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is NavMenu nm)
+            {
+                nm.ReDraw();
+            }
+        }
+
+
+
+        public double DropdownIconMinLeftOffset
+        {
+            get { return (double)GetValue(DropdownIconMinLeftOffsetProperty); }
+            set { SetValue(DropdownIconMinLeftOffsetProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DropdownIconMinLeftOffset.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DropdownIconMinLeftOffsetProperty =
+            DependencyProperty.Register("DropdownIconMinLeftOffset", typeof(double), typeof(NavMenu), new PropertyMetadata(30.0));
 
 
 

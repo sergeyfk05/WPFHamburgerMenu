@@ -23,7 +23,12 @@ namespace HamburgerMenu
         public NavMenuToggleButton()
         {
             InitializeComponent();
+            MouseClickManager manager = new MouseClickManager(200);
+            this.MouseLeftButtonDown += manager.OnMouseLeftButtonDown;
+            this.MouseLeftButtonUp += manager.OnMouseLeftButtonUp;
+            manager.Click += (object sender, MouseButtonEventArgs e) => { OnClicked(); };
         }
+
         #region properties
 
         /// <summary>
@@ -98,6 +103,18 @@ namespace HamburgerMenu
         public void OnParalleled()
         {
             RaiseEvent(new RoutedEventArgs(NavMenuToggleButton.ParalleledEvent));
+        }
+
+        public static readonly RoutedEvent ClickedEvent = EventManager.RegisterRoutedEvent(
+             "Clicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NavMenuToggleButton));
+        public event RoutedEventHandler Clicked
+        {
+            add { AddHandler(ClickedEvent, value); }
+            remove { RemoveHandler(ClickedEvent, value); }
+        }
+        public void OnClicked()
+        {
+            RaiseEvent(new RoutedEventArgs(NavMenuToggleButton.ClickedEvent));
         }
 
         #endregion

@@ -51,6 +51,9 @@
     <Compile Include="Calcs\NavMenuItemCalcs.cs" />
     <Compile Include="Events\ClickedEventArgs.cs" />
     <Compile Include="Events\ClickedEventHandler.cs" />
+    <Compile Include="HamburgerMenu.xaml.cs">
+      <DependentUpon>HamburgerMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MouseClickManager.cs" />
     <Compile Include="NavMenu.xaml.cs">
       <DependentUpon>NavMenu.xaml</DependentUpon>
@@ -82,6 +85,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="HamburgerMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="NavMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
