@@ -1,8 +1,10 @@
 ﻿using HamburgerMenu.Events;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,6 +29,13 @@ namespace HamburgerMenu
         {
             InitializeComponent();
             this.Loaded += HamburgerMenu_Loaded;
+            
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName]string prop = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
         private void HamburgerMenu_Loaded(object sender, RoutedEventArgs e)
@@ -84,8 +93,6 @@ namespace HamburgerMenu
         }
         public static readonly DependencyProperty CollapsedWidthProperty =
             DependencyProperty.Register("CollapsedWidth", typeof(double), typeof(HamburgerMenu), new PropertyMetadata(50.0));
-
-
 
 
         public double ToggleButtonBlockHeight

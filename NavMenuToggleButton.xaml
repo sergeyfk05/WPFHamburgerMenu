@@ -87,4 +87,5 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </UserControl.Template>
+
 </UserControl>
