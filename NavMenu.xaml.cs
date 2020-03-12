@@ -67,7 +67,8 @@ namespace HamburgerMenu
                 Foreground = item.IsSelected ? new SolidColorBrush(SelectedItemTextColor) : new SolidColorBrush(ItemTextColor),
                 FontFamily = ItemTextFontFamily,
                 FontSize = ItemTextFontSize,
-                FontWeight = ItemTextFontWeight
+                FontWeight = ItemTextFontWeight,
+                Margin = new Thickness(0, 0, (ItemHeight - ItemTextFontSize) / 2, 0)
             };
             DockPanel.SetDock(text, Dock.Left);
             result.Children.Add(text);
