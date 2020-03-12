@@ -40,40 +40,4 @@
             </DockPanel>
         </ControlTemplate>
     </UserControl.Template>
-
-    <!--<DockPanel x:Name="Root" VerticalAlignment="Stretch" Background="{Binding Background}">
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" Height="{Binding ToggleButtonBlockHeight}" Background="{Binding ToggleButtonBackground}">
-            <local:NavMenuToggleButton Width="{Binding CollapsedWidth}" Color="{Binding ToggleButtonColor}" IsParallel="{Binding IsCollapsed}"  Background="{Binding ToggleButtonBackground}" Cursor="Hand">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDown">
-                        <i:InvokeCommandAction Command="{Binding ClickContent}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </local:NavMenuToggleButton>
-        </StackPanel>
-   
-        <DockPanel DockPanel.Dock="Top">
-            <local:NavMenu ItemSource="{Binding TopNavMenuItemSource}" IsEnabled="{Binding NavMenusIsEnabled}" 
-                                   MouseInOverAnimationDuration="{Binding NavMenuItemMouseInOverAnimationDuration}" DropdownMenuAnimationDuration="{Binding DropdownNavMenuAnimationDuration}" 
-                                   DropdownMenuFunction="{Binding AnimationFunction}" DropdownIconSectionWidth="{Binding CollapsedWidth}"
-                                   ItemHeight="{Binding TopNavMenuItemHeight}" IconSize="{Binding TopNavMenuItemIconSize}" Background="{Binding NavMenuBackground}" 
-                                   MouseInItemBackground="{Binding NavMenuMouseInItemBackground}" SelectedItemBackground="{Binding NavMenuSelectedItemBackground}" 
-                                   DropdownMenuLeftOffset="{Binding NavMenuDropdownIconLeftOffset}" DropdownIconSize="{Binding NavMenuDropdownIconSize}" DropdownIconSource="{Binding NavMenuDropdownIconSource}" 
-                                   ItemTextColor="{Binding NavMenuItemTextColor}" MouseInItemTextColor="{Binding NavMenuMouseInItemTextColor}" SelectedItemTextColor="{Binding NavMenuSelectedItemTextColor}"
-                                   ItemTextFontFamily="{Binding NavMenuItemTextFontFamily}" ItemTextFontWeight="{Binding NavMenuItemTextFontWeight}" ItemTextFontSize="{Binding NavMenuItemTextFontSize}"
-                                   DropdownIconMinLeftOffset="{Binding NavMenuDropdownIconMinLeftOffset}" Clicked="NavMenu_Click"/>
-        </DockPanel>
-
-        <DockPanel  DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
-            <local:NavMenu ItemSource="{Binding BottomNavMenuItemSource}" 
-                                   MouseInOverAnimationDuration="{Binding NavMenuItemMouseInOverAnimationDuration}" DropdownMenuAnimationDuration="{Binding DropdownNavMenuAnimationDuration}" 
-                                   DropdownMenuFunction="{Binding AnimationFunction}" DropdownIconSectionWidth="{Binding CollapsedWidth}"
-                                   ItemHeight="{Binding BottomNavMenuItemHeight}" IconSize="{Binding BottomNavMenuItemIconSize}" Background="{Binding NavMenuBackground}"
-                                   MouseInItemBackground="{Binding NavMenuMouseInItemBackground}" SelectedItemBackground="{Binding NavMenuSelectedItemBackground}"
-                                   DropdownMenuLeftOffset="{Binding NavMenuDropdownIconLeftOffset}" DropdownIconSize="{Binding NavMenuDropdownIconSize}" DropdownIconSource="{Binding NavMenuDropdownIconSource}"
-                                   ItemTextColor="{Binding NavMenuItemTextColor}" MouseInItemTextColor="{Binding NavMenuMouseInItemTextColor}" SelectedItemTextColor="{Binding NavMenuSelectedItemTextColor}"
-                                   ItemTextFontFamily="{Binding NavMenuItemTextFontFamily}" ItemTextFontWeight="{Binding NavMenuItemTextFontWeight}" ItemTextFontSize="{Binding NavMenuItemTextFontSize}"
-                                   DropdownIconMinLeftOffset="{Binding NavMenuDropdownIconMinLeftOffset}" Clicked="NavMenu_Click"/>
-        </DockPanel>
-    </DockPanel>-->
 </UserControl>

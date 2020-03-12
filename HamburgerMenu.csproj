@@ -34,9 +34,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Interactivity">
-      <HintPath>.\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -52,9 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calcs\NavMenuItemCalcs.cs" />
-    <Compile Include="Commands\BaseCommand.cs" />
-    <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Commands\RelayCommandWithParameter.cs" />
     <Compile Include="Events\ClickedEventArgs.cs" />
     <Compile Include="Events\ClickedEventHandler.cs" />
     <Compile Include="HamburgerMenu.xaml.cs">

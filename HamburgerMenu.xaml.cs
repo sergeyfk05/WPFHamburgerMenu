@@ -127,7 +127,6 @@ namespace HamburgerMenu
 
 
 
-
         public bool IsCollapsed
         {
             get { return (bool)GetValue(IsCollapsedProperty); }
