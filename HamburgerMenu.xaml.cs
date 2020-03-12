@@ -32,12 +32,6 @@ namespace HamburgerMenu
             
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-
         private void HamburgerMenu_Loaded(object sender, RoutedEventArgs e)
         {
             if (sender is HamburgerMenu hm)
@@ -411,8 +405,22 @@ namespace HamburgerMenu
         public static readonly DependencyProperty AnimationFunctionProperty =
             DependencyProperty.Register("AnimationFunction", typeof(IEasingFunction), typeof(HamburgerMenu), new PropertyMetadata(new CircleEase()));
 
+
+
+        public NavMenuItemData LastClickedItem
+        {
+            get { return (NavMenuItemData)GetValue(LastClickedItemProperty); }
+            set { SetValue(LastClickedItemProperty, value); }
+        }
+        public static readonly DependencyProperty LastClickedItemProperty =
+            DependencyProperty.Register("LastClickedItem", typeof(NavMenuItemData), typeof(HamburgerMenu), new PropertyMetadata(null));
+
+
+
+
         private void NavMenu_Click(object sender, ClickedEventArgs e)
         {
+            LastClickedItem = e.ClickedItem;
             RaiseClickedEvent(e.ClickedItem);
         }
 
